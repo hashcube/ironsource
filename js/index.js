@@ -17,7 +17,7 @@ var is_rv_available = false;
  */
 var is_ow_available = false;
 
-var Supersonic = Class(Emitter, function (supr) {
+var Ironsource = Class(Emitter, function (supr) {
   this.init = function() {
     supr(this, 'init', arguments);
 
@@ -88,28 +88,28 @@ var Supersonic = Class(Emitter, function (supr) {
       }
     });
 
-    NATIVE.events.registerHandler("SupersonicAdDismissed", function() {
-      logger.log("{supersonic} ad dismissed ");
+    NATIVE.events.registerHandler("ironsourceAdDismissed", function() {
+      logger.log("{ironSource} ad dismissed ");
       if (typeof onAdDismissed === "function") {
         onAdDismissed();
       }
     });
 
-    NATIVE.events.registerHandler("SupersonicAdAvailable", function() {
-      logger.log("{supersonic} ad available");
+    NATIVE.events.registerHandler("ironsourceAdAvailable", function() {
+      logger.log("{ironSource} ad available");
       if (typeof onAdAvailable === "function") {
-        onAdAvailable("supersonic");
+        onAdAvailable("ironSource");
       }
     });
 
-    NATIVE.events.registerHandler("SupersonicAdNotAvailable", function() {
-      logger.log("{supersonic} ad not available");
+    NATIVE.events.registerHandler("ironsourceAdNotAvailable", function() {
+      logger.log("{ironSource} ad not available");
       if (typeof onAdNotAvailable === "function") {
         onAdNotAvailable();
       }
     });
-
     function onRWAvailabilityChange(is_rv_connected) {
+      logger.log("Rewarded Video is now available before asigning");
       var available = is_rv_connected && is_online;
 
       if (available != is_rv_available) {
@@ -123,12 +123,12 @@ var Supersonic = Class(Emitter, function (supr) {
       }
     };
 
-    NATIVE.events.registerHandler('supersonicRVAdClosed', function(evt) {
+    NATIVE.events.registerHandler('ironsourceRVAdClosed', function(evt) {
       this.onVideoClosed(rv_source, evt.placement, evt.rewardedCount);
       rv_source = null;
     });
 
-    NATIVE.events.registerHandler('supersonicOnRVAvailabilityChange', function(evt) {
+    NATIVE.events.registerHandler('ironsourceOnRVAvailabilityChange', function(evt) {
       onRWAvailabilityChange(evt.available);
     });
 
@@ -148,11 +148,11 @@ var Supersonic = Class(Emitter, function (supr) {
   };
 
   this.showInterstitial = function() {
-    NATIVE.plugins.sendEvent("SupersonicPlugin", "showInterstitial", JSON.stringify({}));
+    NATIVE.plugins.sendEvent("IronsourcePlugin", "showInterstitial", JSON.stringify({}));
   };
 
   this.cacheInterstitial = function() {
-    NATIVE.plugins.sendEvent("SupersonicPlugin", "cacheInterstitial", JSON.stringify({}));
+    NATIVE.plugins.sendEvent("IronsourcePlugin", "cacheInterstitial", JSON.stringify({}));
   }
 
   this.isOWAdAvailable = function() {
@@ -160,13 +160,14 @@ var Supersonic = Class(Emitter, function (supr) {
   };
 
   this.isVideoAdAvailable = function() {
+    logger.log("{ironSource} isVideoAdAvailable plugin function ");
     return is_rv_available === true;
   };
 
   this.initInterstitial = function(user_id) {
     this.user_id = user_id;
 
-    NATIVE.plugins.sendEvent("SupersonicPlugin", "initInterstitial", JSON.stringify({
+    NATIVE.plugins.sendEvent("IronsourcePlugin", "initInterstitial", JSON.stringify({
       user_id: user_id
     }));
   };
@@ -174,13 +175,13 @@ var Supersonic = Class(Emitter, function (supr) {
   this.initVideoAd = function(user_id) {
     this.user_id = user_id;
 
-    NATIVE.plugins.sendEvent("SupersonicPlugin", "initVideoAd", JSON.stringify({
+    NATIVE.plugins.sendEvent("IronsourcePlugin", "initVideoAd", JSON.stringify({
       user_id: user_id
     }));
   };
 
   this.initOfferWallAd = function(user_id) {
-    NATIVE.plugins.sendEvent("SupersonicPlugin", "initOfferWallAd", JSON.stringify({
+    NATIVE.plugins.sendEvent("IronsourcePlugin", "initOfferWallAd", JSON.stringify({
       user_id: user_id
     }));
   };
@@ -188,16 +189,16 @@ var Supersonic = Class(Emitter, function (supr) {
   this.showVideoAd = function(placement_name) {
     rv_source = placement_name;
 
-    NATIVE.plugins.sendEvent("SupersonicPlugin", "showRVAd", JSON.stringify({
+    NATIVE.plugins.sendEvent("IronsourcePlugin", "showRVAd", JSON.stringify({
       placementName: placement_name
     }));
   };
 
   this.showOWAd = function(userid) {
-    NATIVE.plugins.sendEvent("SupersonicPlugin", "showOffersForUserID", JSON.stringify({
+    NATIVE.plugins.sendEvent("IronsourcePlugin", "showOffersForUserID", JSON.stringify({
       userID: userid
     }));
   };
 });
 
-exports = new Supersonic();
+exports = new Ironsource();

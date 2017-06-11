@@ -1,8 +1,8 @@
-# Game Closure DevKit Module: Supersonic / ironSource
+# Game Closure DevKit Module: Ironsource / ironSource
 
 
 This module allows you to display interstitial, video ads and offerwalls
-from the Supersonic mediation service.
+from the Ironsource mediation service.
 
 Both iOS and Android targets are supported.
 
@@ -12,33 +12,33 @@ Install the module into your application using the standard
 devkit install process.
 
 ~~~
-devkit install https://github.com/hashcube/supersonic
+devkit install https://github.com/hashcube/ironsource
 ~~~
 
 ## Setup
 
-Setup supersonic by configuring the supersonicApp key in manifest.json.
-The supersonicAppKey can be fetched from the Supersonic/ironsource dashboard
+Setup ironsource by configuring the ironsourceApp key in manifest.json.
+The ironsourceAppKey can be fetched from the Ironsource/ironsource dashboard
 
 #### Manifest.json
 ~~~
   "android": {
-    "supersonicAppKey": "key",
+    "ironsourceAppKey": "key",
   },
 ~~~
 
 ~~~
   "ios": {
-    "supersonicAppKey": "key",
+    "ironsourceAppKey": "key",
   },
 ~~~
 
 You must add all of the providers you wish to bundle with your application
-to the `addons.supersonic.<PLATFORM>.providers` lists or they will not be
+to the `addons.ironsource.<PLATFORM>.providers` lists or they will not be
 included in the build and you will not be able to use them in your game.
 ~~~
 "addons": {
-    "supersonic": {
+    "ironsource": {
         "android": {
             "providers": [
                 "chartboost",
@@ -66,8 +66,8 @@ The plugin comes with several ad providers already
 available in order to make using the plugin as easy as possible.
 
 Adding one of the included providers is usually as easy as adding
-the provider name to the manifest `addons.supersonic.[platform].providers`
-list and adding any necessary SDK keys. The supersonic module will
+the provider name to the manifest `addons.ironsource.[platform].providers`
+list and adding any necessary SDK keys. The ironsource module will
 use the providers list to automatically create all of your configuration
 
 To use any of these, in the game please add it the `addons` block in manifest.json
@@ -75,7 +75,7 @@ as mentioned before.
 
 ## Integrating Additional Providers
 
-To integrate additional providers supportd by supersonic, you'll need to
+To integrate additional providers supportd by ironsource, you'll need to
 manually add all of the files and configuration to the correct locations in
 the build/providers/<provider_name> folder.
 

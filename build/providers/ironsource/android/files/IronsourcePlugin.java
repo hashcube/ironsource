@@ -26,20 +26,20 @@ import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.sdk.SSAFactory;
 import com.ironsource.mediationsdk.utils.IronSourceUtils;
 
-public class SupersonicPlugin implements IPlugin {
+public class IronsourcePlugin implements IPlugin {
 
   Context _ctx = null;
   Activity _activity = null;
   String appKey = "";
-  private IronSource mSupersonicInstance;
-  private SupersonicListener listener = null;
+  private IronSource mIronsourceInstance;
+  private IronsourceListener listener = null;
 
   private Placement mPlacement;
   private Integer rewardedCount = 0;
 
-  public class SupersonicListener implements InterstitialListener, RewardedVideoListener, OfferwallListener {
+  public class IronsourceListener implements InterstitialListener, RewardedVideoListener, OfferwallListener {
     /************************************************************
-     *         Supersonic Interstitial Listeners
+     *         Ironsource Interstitial Listeners
      ************************************************************
      */
 
@@ -47,7 +47,7 @@ public class SupersonicPlugin implements IPlugin {
      * Invoked when Interstitial initialization process completes successfully.
      */
     public void onInterstitialInitSuccess() {
-      logger.log("{supersonic} onInterstitialInitSuccess");
+      logger.log("{ironsource} onInterstitialInitSuccess");
     }
 
     /**
@@ -55,7 +55,7 @@ public class SupersonicPlugin implements IPlugin {
      * @param ironSourceError - An Object which represents the reason of initialization failure.
      */
     public void onInterstitialInitFailed(IronSourceError ironSourceError) {
-      logger.log("{supersonic} onInterstitialInitFail", ironSourceError);
+      logger.log("{ironsource} onInterstitialInitFail", ironSourceError);
     }
 
     /*
@@ -64,7 +64,7 @@ public class SupersonicPlugin implements IPlugin {
     @Override
     public void onInterstitialAdClicked() {
         // called when the interstitial has been clicked
-        logger.log("{supersonic} onInterstitialAdClicked");
+        logger.log("{ironsource} onInterstitialAdClicked");
     }
 
     /*
@@ -72,8 +72,8 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onInterstitialAdShowFailed(IronSourceError ironSourceError) {
-        logger.log("{supersonic} onInterstitialAdShowFailed", ironSourceError);
-        EventQueue.pushEvent(new SupersonicAdNotAvailable());
+        logger.log("{ironsource} onInterstitialAdShowFailed", ironSourceError);
+        EventQueue.pushEvent(new IronsourceAdNotAvailable());
     }
 
     /*
@@ -81,7 +81,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onInterstitialAdShowSucceeded() {
-        logger.log("{supersonic} onInterstitialAdShowSucceeded");
+        logger.log("{ironsource} onInterstitialAdShowSucceeded");
     }
 
     /*
@@ -89,7 +89,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onInterstitialAdClosed() {
-        logger.log("{supersonic} onInterstitialAdClosed");
+        logger.log("{ironsource} onInterstitialAdClosed");
     }
 
     /*
@@ -97,8 +97,8 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onInterstitialAdReady() {
-        logger.log("{supersonic} onInterstitialReady");
-        EventQueue.pushEvent(new SupersonicAdAvailable());
+        logger.log("{ironsource} onInterstitialReady");
+        EventQueue.pushEvent(new IronsourceAdAvailable());
     }
 
     /*
@@ -106,15 +106,15 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onInterstitialAdLoadFailed(IronSourceError ironSourceError) {
-        logger.log("{supersonic} onInterstitialLoadFailed", ironSourceError);
-        EventQueue.pushEvent(new SupersonicAdNotAvailable());
+        logger.log("{ironsource} onInterstitialLoadFailed", ironSourceError);
+        EventQueue.pushEvent(new IronsourceAdNotAvailable());
     }
 
     /*
      * Invoked when the ad was opened and shown successfully.
      */
     public void onInterstitialShowSuccess() {
-      logger.log("{supersonic} onInterstitialShowSuccess");
+      logger.log("{ironsource} onInterstitialShowSuccess");
     }
 
     /**
@@ -122,12 +122,12 @@ public class SupersonicPlugin implements IPlugin {
      * @param ironSourceError - An object which represents the reason of showInterstitial failure.
      */
     public void onInterstitialShowFailed(IronSourceError ironSourceError) {
-      logger.log("{supersonic} onInterstitialShowFailed", ironSourceError);
+      logger.log("{ironsource} onInterstitialShowFailed", ironSourceError);
     }
 
     @Override
     public void onInterstitialAdOpened() {
-        logger.log("{supersonic} onInterstitialAdOpened");
+        logger.log("{ironsource} onInterstitialAdOpened");
     }
 
     /*
@@ -140,8 +140,8 @@ public class SupersonicPlugin implements IPlugin {
      * Invoked when the ad is closed and the user is about to return to the application.
      */
     public void onInterstitialClose() {
-      logger.log("{supersonic} onInterstitialClose");
-      EventQueue.pushEvent(new SupersonicAdDismissed());
+      logger.log("{ironsource} onInterstitialClose");
+      EventQueue.pushEvent(new IronsourceAdDismissed());
     }
 
     /**
@@ -151,7 +151,7 @@ public class SupersonicPlugin implements IPlugin {
     }
 
     /************************************************************
-     *         Supersonic Offerwall Listeners
+     *         Ironsource Offerwall Listeners
      ************************************************************
      */
 
@@ -160,7 +160,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onOfferwallOpened() {
-      logger.log("{supersonic} onOfferwallOpened");
+      logger.log("{ironsource} onOfferwallOpened");
     }
 
     /**
@@ -178,7 +178,7 @@ public class SupersonicPlugin implements IPlugin {
       */
     @Override
     public boolean onOfferwallAdCredited(int credits, int totalCredits, boolean totalCreditsFlag) {
-      logger.log("{supersonic} onOWAdCredited");
+      logger.log("{ironsource} onOWAdCredited");
       EventQueue.pushEvent(new onOWAdCredited(credits));
       return true;
     }
@@ -188,7 +188,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onOfferwallAvailable(boolean available) {
-        logger.log("{supersonic} onOfferwallAvailable");
+        logger.log("{ironsource} onOfferwallAvailable");
         EventQueue.pushEvent(new onOWAdAvailabilityChange(available));
     }
 
@@ -197,7 +197,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onOfferwallShowFailed(IronSourceError ironSourceError) {
-        logger.log("{supersonic} onOfferwallShowFailed", ironSourceError);
+        logger.log("{ironsource} onOfferwallShowFailed", ironSourceError);
     }
 
     /*
@@ -205,7 +205,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onGetOfferwallCreditsFailed(IronSourceError ironSourceError) {
-        logger.log("{supersonic} onGetOfferwallCreditsFailed", ironSourceError);
+        logger.log("{ironsource} onGetOfferwallCreditsFailed", ironSourceError);
     }
 
     /**
@@ -214,7 +214,7 @@ public class SupersonicPlugin implements IPlugin {
       */
     @Override
     public void onOfferwallClosed() {
-      logger.log("{supersonic} onOWAdClosed");
+      logger.log("{ironsource} onOWAdClosed");
     }
 
     /*
@@ -222,7 +222,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onRewardedVideoAdOpened() {
-      logger.log("{supersonic} onRewardedVideoAdOpened");
+      logger.log("{ironsource} onRewardedVideoAdOpened");
     }
 
     /*
@@ -230,7 +230,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onRewardedVideoAdClosed() {
-      logger.log("{supersonic} onRewardedVideoAdClosed");
+      logger.log("{ironsource} onRewardedVideoAdClosed");
       EventQueue.pushEvent(new onRVAdClosed(mPlacement, rewardedCount));
       mPlacement = null;
       rewardedCount = 0;
@@ -241,7 +241,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onRewardedVideoAvailabilityChanged(boolean available) {
-        logger.log("{supersonic} onVideoAvailabilityChanged: ", available);
+        logger.log("{ironsource} onVideoAvailabilityChanged: ", available);
         EventQueue.pushEvent(new onRVAvailabilityChange(available));
     }
 
@@ -250,7 +250,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onRewardedVideoAdStarted() {
-        logger.log("{supersonic} onVideoStart");
+        logger.log("{ironsource} onVideoStart");
     }
 
     /*
@@ -258,7 +258,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onRewardedVideoAdEnded() {
-        logger.log("{supersonic} onVideoEnd");
+        logger.log("{ironsource} onVideoEnd");
     }
 
     /*
@@ -266,7 +266,7 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onRewardedVideoAdRewarded(Placement placement) {
-      logger.log("{supersonic} onRewardedVideoAdRewarded");
+      logger.log("{ironsource} onRewardedVideoAdRewarded");
       mPlacement = placement;
       rewardedCount++;
     }
@@ -276,28 +276,28 @@ public class SupersonicPlugin implements IPlugin {
      */
     @Override
     public void onRewardedVideoAdShowFailed(IronSourceError ironSourceError) {
-        logger.log("{supersonic} onRewardedVideoShowFail", ironSourceError);
+        logger.log("{ironsource} onRewardedVideoShowFail", ironSourceError);
     }
   }
 
-  public class SupersonicAdNotAvailable extends Event {
+  public class IronsourceAdNotAvailable extends Event {
 
-    public SupersonicAdNotAvailable() {
-      super("SupersonicAdNotAvailable");
+    public IronsourceAdNotAvailable() {
+      super("IronsourceAdNotAvailable");
     }
   }
 
-  public class SupersonicAdAvailable extends Event {
+  public class IronsourceAdAvailable extends Event {
 
-    public SupersonicAdAvailable() {
-      super("SupersonicAdAvailable");
+    public IronsourceAdAvailable() {
+      super("IronsourceAdAvailable");
     }
   }
 
-  public class SupersonicAdDismissed extends Event {
+  public class IronsourceAdDismissed extends Event {
 
-    public SupersonicAdDismissed() {
-      super("SupersonicAdDismissed");
+    public IronsourceAdDismissed() {
+      super("IronsourceAdDismissed");
     }
   }
 
@@ -305,8 +305,8 @@ public class SupersonicPlugin implements IPlugin {
     int credits;
 
     public onOWAdCredited(int credits) {
-      super("supersonicOWCredited");
-      logger.log("{supersonic} Credits received:", credits);
+      super("ironsourceOWCredited");
+      logger.log("{ironsource} Credits received:", credits);
       this.credits = credits;
     }
   }
@@ -315,8 +315,8 @@ public class SupersonicPlugin implements IPlugin {
     boolean available;
 
     public onOWAdAvailabilityChange(boolean available) {
-      super("supersonicOnOWAvailabilityChange");
-      logger.log("{supersonic} supersonicOnOWAvailabilityChange:", available);
+      super("ironsourceOnOWAvailabilityChange");
+      logger.log("{ironsource} ironsourceOnOWAvailabilityChange:", available);
       this.available = available;
     }
   }
@@ -326,12 +326,12 @@ public class SupersonicPlugin implements IPlugin {
     Integer rewardedCount = 0;
 
     public onRVAdClosed(Placement placement, Integer rewardedCount) {
-      super("supersonicRVAdClosed");
+      super("ironsourceRVAdClosed");
       if(placement != null) {
         this.placement = placement.getRewardName();
         this.rewardedCount = rewardedCount;
       }
-      logger.log("{supersonic} RVAd rewarded received:", this.placement, this.rewardedCount);
+      logger.log("{ironsource} RVAd rewarded received:", this.placement, this.rewardedCount);
     }
   }
 
@@ -339,8 +339,8 @@ public class SupersonicPlugin implements IPlugin {
     boolean available;
 
     public onRVAvailabilityChange(boolean available) {
-      super("supersonicOnRVAvailabilityChange");
-      logger.log("{supersonic} supersonicOnRVAvailabilityChange:", available);
+      super("ironsourceOnRVAvailabilityChange");
+      logger.log("{ironsource} ironsourceOnRVAvailabilityChange:", available);
       this.available = available;
     }
   }
@@ -352,12 +352,12 @@ public class SupersonicPlugin implements IPlugin {
       JSONObject jsonObject = new JSONObject(json);
       userId = jsonObject.getString("user_id");
     } catch (Exception e) {
-      logger.log("{supersonic} exception", e);
+      logger.log("{ironsource} exception", e);
     }
     return userId;
   }
 
-  public SupersonicPlugin() {
+  public IronsourcePlugin() {
   }
 
   public void onCreateApplication(Context applicationContext) {
@@ -371,20 +371,20 @@ public class SupersonicPlugin implements IPlugin {
     try {
       Bundle meta = manager.getApplicationInfo(activity.getApplicationContext().getPackageName(),
           PackageManager.GET_META_DATA).metaData;
-      appKey = meta.getString("supersonicAppKey");
+      appKey = meta.getString("ironsourceAppKey");
     } catch (Exception e) {
-      logger.log("{supersonic} Exception while loading manifest keys:", e);
+      logger.log("{ironsource} Exception while loading manifest keys:", e);
     }
 
-    logger.log("{supersonic} Installing for appKey:", appKey);
+    logger.log("{ironsource} Installing for appKey:", appKey);
 
     if(listener == null) {
-      listener = new SupersonicListener();
+      listener = new IronsourceListener();
     }
   }
 
   public void initInterstitial(String jsonData) {
-    logger.log("{supersonic} Init Interstitial");
+    logger.log("{ironsource} Init Interstitial");
 
     SSAFactory.getAdvertiserInstance().reportAppStarted(_ctx);
     IronSource.setInterstitialListener(listener);
@@ -394,7 +394,7 @@ public class SupersonicPlugin implements IPlugin {
   }
 
   public void initVideoAd(String jsonData) {
-    logger.log("{supersonic} Init video Ad");
+    logger.log("{ironsource} Init video Ad");
 
     SSAFactory.getAdvertiserInstance().reportAppStarted(_activity);
     SupersonicConfig.getConfigObj().setClientSideCallbacks(true);
@@ -404,7 +404,7 @@ public class SupersonicPlugin implements IPlugin {
   }
 
   public void initOfferWallAd(String jsonData) {
-    logger.log("{supersonic} Init offerwall Ad");
+    logger.log("{ironsource} Init offerwall Ad");
 
     SSAFactory.getAdvertiserInstance().reportAppStarted(_ctx);
     SupersonicConfig.getConfigObj().setClientSideCallbacks(true);
@@ -414,7 +414,7 @@ public class SupersonicPlugin implements IPlugin {
   }
 
   public void cacheInterstitial(String jsonData) {
-    logger.log("{supersonic} loadInterstitial");
+    logger.log("{ironsource} loadInterstitial");
     _activity.runOnUiThread(new Runnable() {
       public void run() {
         IronSource.loadInterstitial();
@@ -423,7 +423,7 @@ public class SupersonicPlugin implements IPlugin {
   }
 
   public void showInterstitial(String jsonData) {
-    logger.log("{supersonic} showInterstitial called");
+    logger.log("{ironsource} showInterstitial called");
     _activity.runOnUiThread(new Runnable() {
       public void run() {
         IronSource.showInterstitial();
@@ -432,7 +432,7 @@ public class SupersonicPlugin implements IPlugin {
   }
 
   public void showOffersForUserID(String jsonData) {
-    logger.log("{supersonic} showOffers called");
+    logger.log("{ironsource} showOffers called");
 
     if(IronSource.isOfferwallAvailable()) {
       IronSource.showOfferwall();

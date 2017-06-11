@@ -3,7 +3,7 @@
   "version": "2.0.5",
   "devkit": {
     "clientPaths": {
-      "supersonic": "js"
+      "ironsource": "js"
     },
     "extensions": {
       "ios": "ios",

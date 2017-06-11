@@ -1,6 +1,6 @@
 {
   "copyFiles": [
-    "SupersonicPlugin.java"
+    "IronsourcePlugin.java"
   ],
   "jars": [
     "mediationsdk-6.6.1.jar"

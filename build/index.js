@@ -48,34 +48,34 @@ exports.onBeforeBuild = function (api, app, config, cb) {
   // read manifest for which providers are enabled
   if (config.target === 'native-android') {
     if (!app.manifest.addons ||
-        !app.manifest.addons.supersonic ||
-        !app.manifest.addons.supersonic.android ||
-        !app.manifest.addons.supersonic.android.providers) {
-      console.warn('{supersonic} No providers found -- looked in manifest.addons.supersonic.android.providers');
+        !app.manifest.addons.ironsource ||
+        !app.manifest.addons.ironsource.android ||
+        !app.manifest.addons.ironsource.android.providers) {
+      console.warn('{ironsource} No providers found -- looked in manifest.addons.ironsource.android.providers');
     } else {
-      providers = app.manifest.addons.supersonic.android.providers;
+      providers = app.manifest.addons.ironsource.android.providers;
     }
     folder = 'android';
   } else {
     if (!app.manifest.addons ||
-        !app.manifest.addons.supersonic ||
-        !app.manifest.addons.supersonic.ios ||
-        !app.manifest.addons.supersonic.ios.providers) {
-      console.warn('{supersonic} No providers found -- looked in manifest.addons.supersonic.ios.providers');
+        !app.manifest.addons.ironsource ||
+        !app.manifest.addons.ironsource.ios ||
+        !app.manifest.addons.ironsource.ios.providers) {
+      console.warn('{ironsource} No providers found -- looked in manifest.addons.ironsource.ios.providers');
     } else {
-      providers = app.manifest.addons.supersonic.ios.providers;
+      providers = app.manifest.addons.ironsource.ios.providers;
     }
     folder = 'ios';
   }
 
-  // always include supersonic 
-  providers.push('supersonic');
+  // always include ironsource 
+  providers.push('ironsource');
 
   // read provider config and copy any necessary files
   for (i = 0; i < providers.length; i++) {
 
     provider = providers[i];
-    console.log("{supersonic} Adding provider", provider);
+    console.log("{ironsource} Adding provider", provider);
     dirname = path.join(__dirname, 'providers', provider, folder);
 
     // read provider config.json
@@ -131,7 +131,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     );
   }
 
-  // path to plugin platform folder (eg: supersonic/android)
+  // path to plugin platform folder (eg: ironsource/android)
   platformPath = path.join(__dirname, '..', folder);
 
   // remove the target folder in the plugin and recreate with correct content
@@ -187,7 +187,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
 
       return Promise.all(writePromises);
   }).spread(function () {
-    console.log("{supersonic} Finished setting up providers");
+    console.log("{ironsource} Finished setting up providers");
     cb();
   });
 }
@@ -311,7 +311,7 @@ var mergeConfig = function (config, newConfig) {
       } else {
         // warn about overwriting keys
         console.warn(
-          "{supersonic} Warning - onBeforeBuild config overwrote existing key",
+          "{ironsource} Warning - onBeforeBuild config overwrote existing key",
           key
         );
         config[key] = newConfig[key];

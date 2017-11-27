@@ -3,7 +3,7 @@
     "IronsourcePlugin.java"
   ],
   "jars": [
-    "mediationsdk-6.6.1.jar"
+    "mediationsdk-6.7.3.jar"
   ],
   "injectionXML": "manifest.xml",
   "injectionXSL": "manifest.xsl"

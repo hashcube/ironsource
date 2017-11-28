@@ -1,7 +1,7 @@
 {
   "code": [
-    "SupersonicPlugin.h",
-    "SupersonicPlugin.mm"
+    "IronSourcePlugin.h",
+    "IronSourcePlugin.mm"
   ],
   "frameworks": [
     "Foundation",
@@ -21,7 +21,7 @@
     "CoreTelephony",
     "Security",
     "Webkit",
-    "Supersonic.framework"
+    "IronSource.framework"
   ],
   "additionalLinkerFlags": [
     "-ObjC"

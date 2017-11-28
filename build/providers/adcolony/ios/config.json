@@ -9,7 +9,7 @@
     "AudioToolbox",
     "libz.1.2.5.dylib",
     "AdColony.framework",
-    "SUAdColonyAdapter.framework"
+    "ISAdColonyAdapter.framework"
   ],
   "additionalLinkerFlags": [
     "-fobjc-arc"

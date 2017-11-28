@@ -218,6 +218,14 @@ public class IronsourcePlugin implements IPlugin {
     }
 
     /*
+     * Invoked when the reward video clicked
+     */
+    @Override
+    public void onRewardedVideoAdClicked(Placement placement) {
+      logger.log("{ironsource} onRewardedVideoAdClicked");
+    }
+
+    /*
      * Invoked when the reward video open
      */
     @Override

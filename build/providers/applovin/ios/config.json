@@ -1,6 +1,6 @@
 {
   "frameworks": [
-    "UIKit",
+    "AppLovinSDK.framework",
     "ISAppLovinAdapter.framework"
   ],
   "additionalLinkerFlags": [

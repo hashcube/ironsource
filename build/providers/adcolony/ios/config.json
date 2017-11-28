@@ -1,13 +1,5 @@
 {
   "frameworks": [
-    "Social",
-    "Webkit",
-    "EventKit",
-    "EventKitUI",
-    "MediaPlayer",
-    "MessageUI",
-    "AudioToolbox",
-    "libz.1.2.5.dylib",
     "AdColony.framework",
     "ISAdColonyAdapter.framework"
   ],

@@ -32,7 +32,7 @@
     NSString *userId = [IronSource advertiserId];
     
     if([userId length] == 0){
-        //If we couldn't get the advertiser id, we will use a default one.
+        //If we couldn't get the advertiser id, we will be blank.
         userId = @"";
     }
     

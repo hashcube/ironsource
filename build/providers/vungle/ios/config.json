@@ -5,7 +5,7 @@
     "MediaPlayer",
     "UIKit",
     "WebKit",
-    "SUVungleAdapter.framework",
+    "ISVungleAdapter.framework",
     "VungleSDK.framework"
   ],
   "plist": {

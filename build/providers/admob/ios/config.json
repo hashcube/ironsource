@@ -1,12 +1,6 @@
 {
   "frameworks": [
-    "AudioToolbox",
-    "EventKit",
-    "EventKitUI",
-    "MediaPlayer",
-    "MessageUI",
-    "SafariServices",
-    "SUAdMobAdapter.framework",
+    "ISAdMobAdapter.framework",
     "GoogleMobileAds.framework"
   ],
   "additionalLinkerFlags": [

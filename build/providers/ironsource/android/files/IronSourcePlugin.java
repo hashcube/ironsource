@@ -26,7 +26,7 @@ import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.sdk.SSAFactory;
 import com.ironsource.mediationsdk.utils.IronSourceUtils;
 
-public class IronsourcePlugin implements IPlugin {
+public class IronSourcePlugin implements IPlugin {
 
   Context _ctx = null;
   Activity _activity = null;
@@ -365,7 +365,7 @@ public class IronsourcePlugin implements IPlugin {
     return userId;
   }
 
-  public IronsourcePlugin() {
+  public IronSourcePlugin() {
   }
 
   public void onCreateApplication(Context applicationContext) {

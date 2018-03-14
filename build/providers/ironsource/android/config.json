@@ -1,9 +1,9 @@
 {
   "copyFiles": [
-    "IronsourcePlugin.java"
+    "IronSourcePlugin.java"
   ],
   "jars": [
-    "mediationsdk-6.7.3.jar"
+    "mediationsdk-6.7.7.jar"
   ],
   "injectionXML": "manifest.xml",
   "injectionXSL": "manifest.xsl"

@@ -1,0 +1,4 @@
+//<!--START_PLUGINS_REPOSITORIES-->
+	//<!--Ironsource Dependencies-->
+maven {url "https://dl.bintray.com/ironsource-mobile/android-sdk" }
+//<!--END_PLUGINS_REPOSITORIES-->

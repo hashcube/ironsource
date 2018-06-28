@@ -1,6 +1,9 @@
 {
   "copyFiles": [
-    "IronSourcePlugin.java"
+    "IronSourcePlugin.java",
+    "repositories.xml",
+    "gradletealeaf.xml",
+    "proguard.xml"
   ],
   "injectionTealeafModuleGradleXML": "gradletealeaf.xml",
   "injectionRepositoriesXML": "repositories.xml",

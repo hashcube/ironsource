@@ -1,4 +1,4 @@
 //<!--START_PLUGINS_DEPENDENCIES-->
 	//<!--Ironsource Dependencies-->
-    implementatio 'com.ironsource.sdk:mediationsdk:6.7.9.1@jar'
+    implementation 'com.ironsource.sdk:mediationsdk:6.7.9.1@jar'
 //<!--END_PLUGINS_DEPENDENCIES-->

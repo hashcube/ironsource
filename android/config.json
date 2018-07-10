@@ -1,9 +1,1 @@
-{
-	"jars":["facebookadapter-4.1.1.jar"],
-	"injectionTealeafModuleGradleXML": "gradletealeaf.xml",
-	"copyFiles":["IronSourcePlugin.java"],
-	"injectionXML":"manifest.xml",
-	"injectionXSL":"manifest.xsl",
-	"proguardXML": "proguard.xml",
-    "injectionGradleClasspathXML": "gradleclasspath.xml"
-	}
+{"copyFiles":["IronSourcePlugin.java"],"injectionXML":"manifest.xml","injectionXSL":"manifest.xsl","proguardXML":"proguard.xml","injectionTealeafModuleGradleXML":"gradletealeaf.xml","injectionGradleClasspathXML":"gradleclasspath.xml"}

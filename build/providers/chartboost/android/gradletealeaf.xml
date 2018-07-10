@@ -1,0 +1,5 @@
+
+	//<!--Ironsource Dependencies-->
+	//<!-- Chartboost -->
+    implementation 'com.ironsource.adapters:chartboostadapter:4.1.3@jar'
+    

@@ -1,5 +1,5 @@
-#<!--START_PLUGINS_PROGUARD-->
-	#<!--Ironsource Dependencies-->
+//<!--START_PLUGINS_PROGUARD-->
+	//<!--Ironsource Dependencies-->
 -keepclassmembers class com.ironsource.sdk.controller.IronSourceWebView$JSInterface {
     public *;
 }
@@ -13,4 +13,4 @@
 }
 -dontwarn com.moat.**
 -keep class com.moat.** { public protected private *; }
-#<!--END_PLUGINS_PROGUARD-->
+//<!--END_PLUGINS_PROGUARD-->

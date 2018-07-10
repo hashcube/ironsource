@@ -1,0 +1,4 @@
+	//<!--Ironsource Dependencies-->
+	//<!-- Admob -->
+    implementation 'com.ironsource.adapters:admobadapter:4.1.6@jar'
+    

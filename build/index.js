@@ -16,6 +16,7 @@ var XSL_KEYS_MARKER = '<!--*****SUPERSONIC_XSL_KEYS*****-->';
 var XSL_TEMPLATES_MARKER = '<!--*****SUPERSONIC_XSL_TEMPLATES*****-->';
 var XML_APPLICATION_MARKER = '<!--*****SUPERSONIC_PLUGINS_APPLICATION*****-->';
 var XML_MANIFEST_MARKER = '<!--*****SUPERSONIC_PLUGINS_MANIFEST*****-->';
+var XML_GRADLE_TEALEAF_MARKER = '//<!--*****SUPERSONIC_PLUGINS_DEPENDENCIES*****-->';
 
 /**
  * Supersonic.build#onBeforeBuild
@@ -41,8 +42,11 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     xslTemplatePromises = [],
     xmlApplicationPromises = [],
     xmlManifestPromises = [],
-    folder, xslKeys, xslTemplate, xmlApplication, xmlManifest,
+    xmlGradleClasspathPromises = [],
+    xmlGradleTealeafPromises = [],
+    folder, xslKeys, xslTemplate, xmlApplication, xmlManifest, xmlGradleClasspath, xmlGradleTealeaf,
     configPromise, xslPromise, baseXslPath, xslPromise, baseXmlPath, xmlPromise,
+    xmlGradleClasspathPromise, xmlTealeafPromise, baseXmlGradleClasspathPath, baseXmlTealeafPath,
     platformPath, provider, dirname, configFile, i;
 
   // read manifest for which providers are enabled
@@ -109,6 +113,17 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       xmlManifestPromises.push(
         readFileAsync(xmlManifest, 'utf8')
       );
+
+     /* xmlGradleClasspath = path.join(dirname, 'gradleclasspath.xml');
+      xmlGradleClasspathPromises.push(
+        readFileAsync(xmlGradleClasspath, 'utf8')
+      );*/
+
+      xmlGradleTealeaf = path.join(dirname, 'gradletealeaf.xml');
+      xmlGradleTealeafPromises.push(
+        readFileAsync(xmlGradleTealeaf, 'utf8')
+      );
+
     }
   }
 
@@ -129,7 +144,31 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       xmlApplicationPromises,
       xmlManifestPromises
     );
+
+
+      //baseXmlGradleClasspathPath = path.join(__dirname, folder, 'gradleclasspath.xml');
+      baseXmlTealeafPath = path.join(__dirname, folder, 'gradletealeaf.xml');
+
+      //concatContent(xmlGradleClasspathPromises)
+      //concatContent(xmlGradleTealeafPromises)
+
+    /* xmlGradleClasspathPromise = processGradleXml(
+          baseXmlGradleClasspathPath,
+          xmlGradleClasspathPromises,
+          XML_GRADLE_TEALEAF_MARKER
+      );*/
+
+      xmlTealeafPromise = processGradleXml(
+          baseXmlTealeafPath,
+          xmlGradleTealeafPromises,
+          XML_GRADLE_TEALEAF_MARKER
+      );
+
+
+
   }
+
+
 
   // path to plugin platform folder (eg: ironsource/android)
   platformPath = path.join(__dirname, '..', folder);
@@ -153,9 +192,9 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     }
 
     return Promise.all([
-      configPromise, xslPromise, xmlPromise, Promise.all(copyPromises)
+      configPromise, xslPromise, xmlPromise, xmlTealeafPromise, Promise.all(copyPromises)
     ]);
-  }).spread(function (finalConfig, finalXsl, finalXml) {
+  }).spread(function (finalConfig, finalXsl, finalXml, finalTealeaf) {
       var writePromises = [
         // write config.json
         writeFileAsync(
@@ -183,6 +222,15 @@ exports.onBeforeBuild = function (api, app, config, cb) {
             {encoding: 'utf8'}
           )
         );
+
+          // write gradletealeaf.xml
+          writePromises.push(
+              writeFileAsync(
+                  path.join(platformPath, 'gradletealeaf.xml'),
+                  finalTealeaf,
+                  {encoding: 'utf8'}
+              )
+          );
       }
 
       return Promise.all(writePromises);
@@ -255,6 +303,19 @@ function processXml(baseXmlPath, xmlApplicationPromises, xmlManifestPromises) {
   });
 }
 
+function processGradleXml(baseXmlPath, xmlPromises, XML_MARKER) {
+    var xmlPromise = concatContent(xmlPromises);
+
+    return Promise.all([
+        readFileAsync(baseXmlPath, 'utf8'),
+        xmlPromise
+    ]).spread(function (baseXml, xmlPromise) {
+        baseXml = injectContent(baseXml, XML_MARKER, xmlPromise);
+
+        return baseXml;
+    });
+}
+
 /**
  * Accepts a string, a marker, and content and returns the string
  * with the marker replaced with the content.
@@ -274,6 +335,7 @@ function injectContent(content, marker, newContent) {
  * concatenates them all together, returning a promise with the
  * final, concatenated content.
  */
+
 function concatContent(promises) {
   return Promise.reduce(
     promises,

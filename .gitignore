@@ -1,4 +1,14 @@
-/android
-/ios
 node_modules
 .DS_Store
+
+
+
+package-lock.json
+
+android/config.json
+android/gradletealeaf.xml
+android/gradleclasspath.xml
+android/IronSourcePlugin.java
+android/proguard.xml
+android/manifest.xml
+android/manifest.xsl

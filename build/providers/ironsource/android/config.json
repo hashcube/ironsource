@@ -4,5 +4,5 @@
 	"injectionXSL":"manifest.xsl",
 	"proguardXML": "proguard.xml",
 	"injectionTealeafModuleGradleXML": "gradletealeaf.xml",
-    "injectionGradleClasspathXML": "gradleclasspath.xml"
+	"injectionGradleClasspathXML": "gradleclasspath.xml"
 }

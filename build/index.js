@@ -239,6 +239,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         )
       );
 
+      // write gradletealeaf.xml
       writePromises.push(
         writeFileAsync(
           path.join(platformPath, 'gradletealeaf.xml'),
@@ -247,6 +248,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         )
       );
 
+      // write gradleclasspath.xml
       writePromises.push(
         writeFileAsync(
           path.join(platformPath, 'gradleclasspath.xml'),
@@ -255,6 +257,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         )
       );
 
+      // write proguard.xml
       writePromises.push(
         writeFileAsync(
           path.join(platformPath, 'proguard.xml'),
@@ -414,4 +417,3 @@ var mergeConfig = function (config, newConfig) {
     }
   }
 };
-

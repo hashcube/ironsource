@@ -44,9 +44,10 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     xmlManifestPromises = [],
     xmlGradleClasspathPromises = [],
     xmlGradleTealeafPromises = [],
-    folder, xslKeys, xslTemplate, xmlApplication, xmlManifest, xmlGradleClasspath, xmlGradleTealeaf,
+    xmlGradleProguardPromises = [],
+    folder, xslKeys, xslTemplate, xmlApplication, xmlManifest, xmlGradleClasspath, xmlGradleTealeaf, xmlProguard,
     configPromise, xslPromise, baseXslPath, xslPromise, baseXmlPath, xmlPromise,
-    xmlGradleClasspathPromise, xmlTealeafPromise, baseXmlGradleClasspathPath, baseXmlTealeafPath,
+    xmlGradleClasspathPromise, xmlProguardPromise, xmlTealeafPromise, baseXmlGradleClasspathPath, baseXmlTealeafPath,
     platformPath, provider, dirname, configFile, i;
 
   // read manifest for which providers are enabled
@@ -117,9 +118,27 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       );
 
       xmlGradleTealeaf = path.join(dirname, 'gradletealeaf.xml');
-      xmlGradleTealeafPromises.push(
-        readFileAsync(xmlGradleTealeaf, 'utf8')
-      );
+      if(fs.existsSync(xmlGradleTealeaf)) {
+        xmlGradleTealeafPromises.push(
+          readFileAsync(xmlGradleTealeaf, 'utf8')
+        );
+      }
+
+
+        xmlGradleClasspath = path.join(dirname, 'gradleclasspath.xml');
+      if(fs.existsSync(xmlGradleClasspath)) {
+        xmlGradleClasspathPromises.push(
+          readFileAsync(xmlGradleClasspath, 'utf8')
+        );
+      }
+
+
+        xmlProguard = path.join(dirname, 'proguard.xml');
+      if(fs.existsSync(xmlProguard)) {
+        xmlGradleProguardPromises.push(
+          readFileAsync(xmlProguard, 'utf8')
+        );
+      }
 
     }
   }
@@ -147,6 +166,20 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       xmlGradleTealeafPromises,
       XML_GRADLE_TEALEAF_MARKER
     );
+
+    baseXmlClasspathPath = path.join(__dirname, folder, 'gradleclasspath.xml');
+    xmlClasspathPromise = processGradleXml(
+      baseXmlClasspathPath,
+      xmlGradleClasspathPromises,
+      XML_GRADLE_TEALEAF_MARKER
+    );
+
+    baseXmlProguard = path.join(__dirname, folder, 'proguard.xml');
+    xmlProguardPromise = processGradleXml(
+      baseXmlProguard,
+      xmlGradleProguardPromises,
+      XML_GRADLE_TEALEAF_MARKER
+    );
   }
 
   // path to plugin platform folder (eg: ironsource/android)
@@ -171,9 +204,9 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     }
 
     return Promise.all([
-      configPromise, xslPromise, xmlPromise, xmlTealeafPromise, Promise.all(copyPromises)
+      configPromise, xslPromise, xmlPromise, xmlTealeafPromise, xmlClasspathPromise, xmlProguardPromise, Promise.all(copyPromises)
     ]);
-  }).spread(function (finalConfig, finalXsl, finalXml, finalTealeaf) {
+  }).spread(function (finalConfig, finalXsl, finalXml, finalTealeaf, finalClasspath, finalProguard) {
     var writePromises = [
       // write config.json
       writeFileAsync(
@@ -207,6 +240,24 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         writeFileAsync(
           path.join(platformPath, 'gradletealeaf.xml'),
           finalTealeaf,
+          {encoding: 'utf8'}
+        )
+      );
+
+      // write gradletealeaf.xml
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'gradleclasspath.xml'),
+          finalClasspath,
+          {encoding: 'utf8'}
+        )
+      );
+
+      // write gradletealeaf.xml
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'proguard.xml'),
+          finalProguard,
           {encoding: 'utf8'}
         )
       );

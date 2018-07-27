@@ -47,7 +47,8 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     xmlGradleProguardPromises = [],
     folder, xslKeys, xslTemplate, xmlApplication, xmlManifest, xmlGradleClasspath, xmlGradleTealeaf, xmlProguard,
     configPromise, xslPromise, baseXslPath, xslPromise, baseXmlPath, xmlPromise,
-    xmlGradleClasspathPromise, xmlProguardPromise, xmlTealeafPromise, baseXmlGradleClasspathPath, baseXmlTealeafPath,
+    xmlClasspathPromise, xmlProguardPromise, xmlTealeafPromise,  baseXmlTealeafPath,
+    baseXmlProguard,baseXmlClasspathPath,
     platformPath, provider, dirname, configFile, i;
 
   // read manifest for which providers are enabled
@@ -92,7 +93,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     );
 
     // copy all the files in 'files'
-    if (fs.existsSync(path.join(dirname, 'files')) && fs.existsSync(path.join(__dirname, '..', folder))) {
+    if (fs.existsSync(path.join(dirname, 'files'))) {
       copyPaths[path.join(dirname, 'files')] = path.join(__dirname, '..', folder);
     }
 
@@ -196,17 +197,20 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     var srcPaths = Object.keys(copyPaths);
     for (var i = 0; i < srcPaths.length; i++) {
       copyPromises.push(
-        copyFolderAsync(
-          srcPaths[i],
-          copyPaths[srcPaths[i]]
+      copyFolderAsync(
+        srcPaths[i],
+        copyPaths[srcPaths[i]]
         )
-      );
+      )
     }
 
     return Promise.all([
       configPromise, xslPromise, xmlPromise, xmlTealeafPromise, xmlClasspathPromise, xmlProguardPromise, Promise.all(copyPromises)
     ]);
   }).spread(function (finalConfig, finalXsl, finalXml, finalTealeaf, finalClasspath, finalProguard) {
+
+
+
     var writePromises = [
       // write config.json
       writeFileAsync(
@@ -235,7 +239,6 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         )
       );
 
-      // write gradletealeaf.xml
       writePromises.push(
         writeFileAsync(
           path.join(platformPath, 'gradletealeaf.xml'),
@@ -244,7 +247,6 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         )
       );
 
-      // write gradletealeaf.xml
       writePromises.push(
         writeFileAsync(
           path.join(platformPath, 'gradleclasspath.xml'),
@@ -253,7 +255,6 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         )
       );
 
-      // write gradletealeaf.xml
       writePromises.push(
         writeFileAsync(
           path.join(platformPath, 'proguard.xml'),

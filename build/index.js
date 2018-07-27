@@ -417,4 +417,3 @@ var mergeConfig = function (config, newConfig) {
     }
   }
 };
-

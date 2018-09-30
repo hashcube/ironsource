@@ -123,12 +123,12 @@ var IronSource = Class(Emitter, function (supr) {
       }
     };
 
-    NATIVE.events.registerHandler('IronSourceRVAdClosed', function(evt) {
+    NATIVE.events.registerHandler('ironsourceRVAdClosed', function(evt) {
       this.onVideoClosed(rv_source, evt.placement, evt.rewardedCount);
       rv_source = null;
     });
 
-    NATIVE.events.registerHandler('ironSourceOnRVAvailabilityChange', function(evt) {
+    NATIVE.events.registerHandler('ironsourceOnRVAvailabilityChange', function(evt) {
       onRWAvailabilityChange(evt.available);
     });
 

@@ -16,6 +16,7 @@ var XSL_KEYS_MARKER = '<!--*****SUPERSONIC_XSL_KEYS*****-->';
 var XSL_TEMPLATES_MARKER = '<!--*****SUPERSONIC_XSL_TEMPLATES*****-->';
 var XML_APPLICATION_MARKER = '<!--*****SUPERSONIC_PLUGINS_APPLICATION*****-->';
 var XML_MANIFEST_MARKER = '<!--*****SUPERSONIC_PLUGINS_MANIFEST*****-->';
+var XML_GRADLE_TEALEAF_MARKER = '//<!--*****SUPERSONIC_PLUGINS_DEPENDENCIES*****-->';
 
 /**
  * Supersonic.build#onBeforeBuild
@@ -28,7 +29,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
 
   // for each provider
   //  -  merge config.json
-  //  -  merge manifest.xml files -- xmlActivity.xml, xmlApplication.xml, xmlManifest.xml 
+  //  -  merge manifest.xml files -- xmlActivity.xml, xmlApplication.xml, xmlManifest.xml
   //  -  merge manifest.xsl files -- xslKeys.xsl, xslTemplates.xsl
   //  -  copy everything in files to the platform folder
 
@@ -41,16 +42,21 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     xslTemplatePromises = [],
     xmlApplicationPromises = [],
     xmlManifestPromises = [],
-    folder, xslKeys, xslTemplate, xmlApplication, xmlManifest,
+    xmlGradleClasspathPromises = [],
+    xmlGradleTealeafPromises = [],
+    xmlGradleProguardPromises = [],
+    folder, xslKeys, xslTemplate, xmlApplication, xmlManifest, xmlGradleClasspath, xmlGradleTealeaf, xmlProguard,
     configPromise, xslPromise, baseXslPath, xslPromise, baseXmlPath, xmlPromise,
+    xmlClasspathPromise, xmlProguardPromise, xmlTealeafPromise,  baseXmlTealeafPath,
+    baseXmlProguard,baseXmlClasspathPath,
     platformPath, provider, dirname, configFile, i;
 
   // read manifest for which providers are enabled
   if (config.target === 'native-android') {
     if (!app.manifest.addons ||
-        !app.manifest.addons.ironsource ||
-        !app.manifest.addons.ironsource.android ||
-        !app.manifest.addons.ironsource.android.providers) {
+      !app.manifest.addons.ironsource ||
+      !app.manifest.addons.ironsource.android ||
+      !app.manifest.addons.ironsource.android.providers) {
       console.warn('{ironsource} No providers found -- looked in manifest.addons.ironsource.android.providers');
     } else {
       providers = app.manifest.addons.ironsource.android.providers;
@@ -58,9 +64,9 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     folder = 'android';
   } else {
     if (!app.manifest.addons ||
-        !app.manifest.addons.ironsource ||
-        !app.manifest.addons.ironsource.ios ||
-        !app.manifest.addons.ironsource.ios.providers) {
+      !app.manifest.addons.ironsource ||
+      !app.manifest.addons.ironsource.ios ||
+      !app.manifest.addons.ironsource.ios.providers) {
       console.warn('{ironsource} No providers found -- looked in manifest.addons.ironsource.ios.providers');
     } else {
       providers = app.manifest.addons.ironsource.ios.providers;
@@ -68,7 +74,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     folder = 'ios';
   }
 
-  // always include ironsource 
+  // always include ironsource
   providers.push('ironsource');
 
   // read provider config and copy any necessary files
@@ -87,7 +93,9 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     );
 
     // copy all the files in 'files'
-    copyPaths[path.join(dirname, 'files')] = path.join(__dirname, '..', folder);
+    if (fs.existsSync(path.join(dirname, 'files'))) {
+      copyPaths[path.join(dirname, 'files')] = path.join(__dirname, '..', folder);
+    }
 
     if (config.target === 'native-android') {
       // read provider manifest.xsl changes
@@ -109,9 +117,32 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       xmlManifestPromises.push(
         readFileAsync(xmlManifest, 'utf8')
       );
+
+      xmlGradleTealeaf = path.join(dirname, 'gradletealeaf.xml');
+      if(fs.existsSync(xmlGradleTealeaf)) {
+        xmlGradleTealeafPromises.push(
+          readFileAsync(xmlGradleTealeaf, 'utf8')
+        );
+      }
+
+
+        xmlGradleClasspath = path.join(dirname, 'gradleclasspath.xml');
+      if(fs.existsSync(xmlGradleClasspath)) {
+        xmlGradleClasspathPromises.push(
+          readFileAsync(xmlGradleClasspath, 'utf8')
+        );
+      }
+
+
+        xmlProguard = path.join(dirname, 'proguard.xml');
+      if(fs.existsSync(xmlProguard)) {
+        xmlGradleProguardPromises.push(
+          readFileAsync(xmlProguard, 'utf8')
+        );
+      }
+
     }
   }
-
 
   // merge all the configs together
   configPromise = processConfig(configPromises);
@@ -129,6 +160,27 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       xmlApplicationPromises,
       xmlManifestPromises
     );
+
+    baseXmlTealeafPath = path.join(__dirname, folder, 'gradletealeaf.xml');
+    xmlTealeafPromise = processGradleXml(
+      baseXmlTealeafPath,
+      xmlGradleTealeafPromises,
+      XML_GRADLE_TEALEAF_MARKER
+    );
+
+    baseXmlClasspathPath = path.join(__dirname, folder, 'gradleclasspath.xml');
+    xmlClasspathPromise = processGradleXml(
+      baseXmlClasspathPath,
+      xmlGradleClasspathPromises,
+      XML_GRADLE_TEALEAF_MARKER
+    );
+
+    baseXmlProguard = path.join(__dirname, folder, 'proguard.xml');
+    xmlProguardPromise = processGradleXml(
+      baseXmlProguard,
+      xmlGradleProguardPromises,
+      XML_GRADLE_TEALEAF_MARKER
+    );
   }
 
   // path to plugin platform folder (eg: ironsource/android)
@@ -145,47 +197,77 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     var srcPaths = Object.keys(copyPaths);
     for (var i = 0; i < srcPaths.length; i++) {
       copyPromises.push(
-        copyFolderAsync(
-          srcPaths[i],
-          copyPaths[srcPaths[i]]
+      copyFolderAsync(
+        srcPaths[i],
+        copyPaths[srcPaths[i]]
+        )
+      )
+    }
+
+    return Promise.all([
+      configPromise, xslPromise, xmlPromise, xmlTealeafPromise, xmlClasspathPromise, xmlProguardPromise, Promise.all(copyPromises)
+    ]);
+  }).spread(function (finalConfig, finalXsl, finalXml, finalTealeaf, finalClasspath, finalProguard) {
+
+
+
+    var writePromises = [
+      // write config.json
+      writeFileAsync(
+        path.join(platformPath, 'config.json'),
+        JSON.stringify(finalConfig),
+        {encoding: 'utf8'}
+      )
+    ];
+
+    if (config.target === 'native-android') {
+      // write manifest.xml
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'manifest.xml'),
+          finalXml,
+          {encoding: 'utf8'}
+        )
+      );
+
+      // write manifest.xsl
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'manifest.xsl'),
+          finalXsl,
+          {encoding: 'utf8'}
+        )
+      );
+
+      // write gradletealeaf.xml
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'gradletealeaf.xml'),
+          finalTealeaf,
+          {encoding: 'utf8'}
+        )
+      );
+
+      // write gradleclasspath.xml
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'gradleclasspath.xml'),
+          finalClasspath,
+          {encoding: 'utf8'}
+        )
+      );
+
+      // write proguard.xml
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'proguard.xml'),
+          finalProguard,
+          {encoding: 'utf8'}
         )
       );
     }
 
-    return Promise.all([
-      configPromise, xslPromise, xmlPromise, Promise.all(copyPromises)
-    ]);
-  }).spread(function (finalConfig, finalXsl, finalXml) {
-      var writePromises = [
-        // write config.json
-        writeFileAsync(
-          path.join(platformPath, 'config.json'),
-          JSON.stringify(finalConfig),
-          {encoding: 'utf8'}
-        )
-      ];
-
-      if (config.target === 'native-android') {
-        // write manifest.xml
-        writePromises.push(
-          writeFileAsync(
-            path.join(platformPath, 'manifest.xml'),
-            finalXml,
-            {encoding: 'utf8'}
-          )
-        );
-
-        // write manifest.xsl
-        writePromises.push(
-          writeFileAsync(
-            path.join(platformPath, 'manifest.xsl'),
-            finalXsl,
-            {encoding: 'utf8'}
-          )
-        );
-      }
-
-      return Promise.all(writePromises);
+    return Promise.all(writePromises);
   }).spread(function () {
     console.log("{ironsource} Finished setting up providers");
     cb();
@@ -255,6 +337,19 @@ function processXml(baseXmlPath, xmlApplicationPromises, xmlManifestPromises) {
   });
 }
 
+function processGradleXml(baseXmlPath, xmlPromises, XML_MARKER) {
+  var xmlPromise = concatContent(xmlPromises);
+
+  return Promise.all([
+    readFileAsync(baseXmlPath, 'utf8'),
+    xmlPromise
+  ]).spread(function (baseXml, xmlPromise) {
+    baseXml = injectContent(baseXml, XML_MARKER, xmlPromise);
+
+    return baseXml;
+  });
+}
+
 /**
  * Accepts a string, a marker, and content and returns the string
  * with the marker replaced with the content.
@@ -274,6 +369,7 @@ function injectContent(content, marker, newContent) {
  * concatenates them all together, returning a promise with the
  * final, concatenated content.
  */
+
 function concatContent(promises) {
   return Promise.reduce(
     promises,
@@ -321,4 +417,3 @@ var mergeConfig = function (config, newConfig) {
     }
   }
 };
-

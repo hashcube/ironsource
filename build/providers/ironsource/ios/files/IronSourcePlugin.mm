@@ -93,7 +93,7 @@
         available = @"true";
     }
     [[PluginManager get] dispatchJSEvent:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"ironSourceOnRVAvailabilityChange",@"name",
+                                          @"onOWAdAvailabilityChange",@"name",
                                           available, @"available",
                                           nil]];
 }
@@ -145,7 +145,7 @@
         available = @"true";
     }
     [[PluginManager get] dispatchJSEvent:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"ironSourceOnRVAvailabilityChange",@"name",
+                                          @"ironsourceOnRVAvailabilityChange",@"name",
                                           available, @"available",
                                           nil]];
 }
@@ -182,7 +182,7 @@
     }
     
     [[PluginManager get] dispatchJSEvent:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"ironSourceRVAdClosed",@"name",
+                                          @"ironsourceRVAdClosed",@"name",
                                           rewardName, @"placement",
                                           rewardedCount, @"rewardedCount",
                                           nil]];

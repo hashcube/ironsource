@@ -88,21 +88,21 @@ var IronSource = Class(Emitter, function (supr) {
       }
     });
 
-    NATIVE.events.registerHandler("ironsSAdDismissed", function() {
+    NATIVE.events.registerHandler("IronsourceAdDismissed", function() {
       logger.log("{ironSource} ad dismissed ");
       if (typeof onAdDismissed === "function") {
         onAdDismissed();
       }
     });
 
-    NATIVE.events.registerHandler("ironSourceAdAvailable", function() {
+    NATIVE.events.registerHandler("IronsourceAdAvailable", function() {
       logger.log("{ironSource} ad available");
       if (typeof onAdAvailable === "function") {
         onAdAvailable("ironSource");
       }
     });
 
-    NATIVE.events.registerHandler("ironSourceAdNotAvailable", function() {
+    NATIVE.events.registerHandler("IronsourceAdNotAvailable", function() {
       logger.log("{ironSource} ad not available");
       if (typeof onAdNotAvailable === "function") {
         onAdNotAvailable();

@@ -206,14 +206,14 @@
     NSLog(@"%s",__PRETTY_FUNCTION__);
     NSLog(@"{ironSource} onInterstitialReady");
     [[PluginManager get] dispatchJSEvent:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"IronSourceAdAvailable",@"name",
+                                          @"IronsourceAdAvailable",@"name",
                                           nil]];
 }
 
 - (void)interstitialDidFailToLoadWithError:(NSError *)error {
     NSLog(@"%s",__PRETTY_FUNCTION__);
     [[PluginManager get] dispatchJSEvent:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"IronSourceAdNotAvailable",@"name",
+                                          @"IronsourceAdNotAvailable",@"name",
                                           nil]];
 }
 
@@ -243,7 +243,7 @@
 - (void)interstitialDidClose {
     NSLog(@"{ironSource} onInterstitialClose");
     [[PluginManager get] dispatchJSEvent:[NSDictionary dictionaryWithObjectsAndKeys:
-                                          @"IronSourceAdDismissed",@"name",
+                                          @"IronsourceAdDismissed",@"name",
                                           nil]];
 }
 @end

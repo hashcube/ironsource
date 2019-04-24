@@ -98,7 +98,7 @@ var IronSource = Class(Emitter, function (supr) {
     NATIVE.events.registerHandler("IronsourceAdAvailable", function() {
       logger.log("{ironSource} ad available");
       if (typeof onAdAvailable === "function") {
-        onAdAvailable("ironSource");
+        onAdAvailable("ironsource");
       }
     });
 

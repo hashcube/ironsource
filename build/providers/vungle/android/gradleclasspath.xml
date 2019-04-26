@@ -1,0 +1,4 @@
+	//<!-- Vungle Dependencies-->
+maven {
+        url "https://jitpack.io"
+    }

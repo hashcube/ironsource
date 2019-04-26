@@ -385,7 +385,6 @@ public class IronSourcePlugin implements IPlugin {
     }
 
     logger.log("{ironsource} Installing for appKey:", appKey);
-
     if(listener == null) {
       listener = new IronsourceListener();
     }

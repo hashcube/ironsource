@@ -1,0 +1,3 @@
+//<!-- Vungle -->
+  implementation 'com.ironsource.adapters:vungleadapter:4.1.5@jar'
+  implementation 'com.github.vungle:vungle-android-sdk:6.3.24'

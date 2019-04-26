@@ -1,5 +1,4 @@
-//<!--Ironsource Dependencies-->
 //<!-- Admob -->
-  implementation 'com.ironsource.adapters:admobadapter:4.2.0@jar'
-  implementation 'com.google.android.gms:play-services-ads:15.0.0'
+  implementation 'com.google.android.gms:play-services-ads:17.2.0'
+  implementation 'com.ironsource.adapters:admobadapter:4.3.3@jar'
 

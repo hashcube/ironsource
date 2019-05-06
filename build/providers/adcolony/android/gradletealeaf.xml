@@ -1,0 +1,3 @@
+//<!-- Adcolony -->
+  implementation 'com.ironsource.adapters:adcolonyadapter:4.1.7@jar'
+  implementation 'com.adcolony:sdk:3.3.8'

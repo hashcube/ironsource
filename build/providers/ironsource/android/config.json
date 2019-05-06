@@ -2,7 +2,6 @@
 	"copyFiles":["IronSourcePlugin.java"],
 	"injectionXML":"manifest.xml",
 	"injectionXSL":"manifest.xsl",
-	"proguardXML": "proguard.xml",
 	"proguardXMLApp": "proguardApp.xml",
 	"injectionTealeafModuleGradleXML": "gradletealeaf.xml",
 	"injectionGradleClasspathXML": "gradleclasspath.xml"

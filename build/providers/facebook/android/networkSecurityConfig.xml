@@ -1,0 +1,3 @@
+<domain-config cleartextTrafficPermitted="true">
+	<domain includeSubdomains="true">127.0.0.1</domain>
+</domain-config>

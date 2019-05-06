@@ -10,5 +10,6 @@ android/gradletealeaf.xml
 android/gradleclasspath.xml
 android/IronSourcePlugin.java
 android/proguard.xml
+android/proguardApp.xml
 android/manifest.xml
 android/manifest.xsl

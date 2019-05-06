@@ -1,0 +1,2 @@
+	//<!--Adcolony Dependencies-->
+maven {url  "https://adcolony.bintray.com/AdColony" }

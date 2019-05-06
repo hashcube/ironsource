@@ -18,6 +18,7 @@ var XML_APPLICATION_MARKER = '<!--*****SUPERSONIC_PLUGINS_APPLICATION*****-->';
 var XML_MANIFEST_MARKER = '<!--*****SUPERSONIC_PLUGINS_MANIFEST*****-->';
 var XML_GRADLE_TEALEAF_MARKER = '//<!--*****SUPERSONIC_PLUGINS_DEPENDENCIES*****-->';
 var XML_PROGUARD_APP_MARKER = '#<!--IRONSOURCE_PLUGINS_DEPENDENCIES-->';
+var XML_NETWORK_SECURITY_CONFIG_APP_MARKER = '//<!--IRONSOURCE_NETWORK_SECURITY_CONFIG-->';
 
 /**
  * Supersonic.build#onBeforeBuild
@@ -45,11 +46,13 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     xmlGradleTealeafPromises = [],
     xmlGradleProguardPromises = [],
     xmlGradleProguardAppPromises = [],
+    netWorkSecurityConfigPromises = [],
     folder, xslKeys, xslTemplate, xmlApplication, xmlManifest,
     xmlGradleClasspath, xmlGradleTealeaf, xmlProguard, xmlAppProguard,
     configPromise, xslPromise, baseXslPath, xslPromise, baseXmlPath, xmlPromise,
     xmlClasspathPromise, xmlProguardPromise, xmlTealeafPromise,  baseXmlTealeafPath,
     baseXmlProguard, baseXmlClasspathPath, baseXmlAppProguard, xmlProguardAppPromise,
+    xmlNetworkSecurityPromise, netWorkSecurityConfig, baseNetWorkSecurityConfig,
     platformPath, provider, dirname, configFile, i;
 
   // read manifest for which providers are enabled
@@ -149,6 +152,13 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         );
       }
 
+      netWorkSecurityConfig = path.join(dirname, 'networkSecurityConfig.xml');
+      if(fs.existsSync(netWorkSecurityConfig)) {
+        netWorkSecurityConfigPromises.push(
+          readFileAsync(netWorkSecurityConfig, 'utf8')
+        );
+      }
+
     }
   }
 
@@ -196,6 +206,13 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       xmlGradleProguardAppPromises,
       XML_PROGUARD_APP_MARKER
     );
+
+    baseNetWorkSecurityConfig = path.join(__dirname, folder, 'netWorkSecurityConfig.xml');
+    xmlNetworkSecurityPromise = processGradleXml(
+      baseNetWorkSecurityConfig,
+      netWorkSecurityConfigPromises,
+      XML_NETWORK_SECURITY_CONFIG_APP_MARKER
+    );
   }
 
   // path to plugin platform folder (eg: ironsource/android)
@@ -220,9 +237,9 @@ exports.onBeforeBuild = function (api, app, config, cb) {
     }
 
     return Promise.all([
-      configPromise, xslPromise, xmlPromise, xmlTealeafPromise, xmlClasspathPromise, xmlProguardPromise, xmlProguardAppPromise, Promise.all(copyPromises)
+      configPromise, xslPromise, xmlPromise, xmlTealeafPromise, xmlClasspathPromise, xmlProguardPromise, xmlProguardAppPromise, xmlNetworkSecurityPromise, Promise.all(copyPromises)
     ]);
-  }).spread(function (finalConfig, finalXsl, finalXml, finalTealeaf, finalClasspath, finalProguard, finalProguardApp) {
+  }).spread(function (finalConfig, finalXsl, finalXml, finalTealeaf, finalClasspath, finalProguard, finalProguardApp, finalNetWorkSecurity) {
 
 
 
@@ -286,6 +303,13 @@ exports.onBeforeBuild = function (api, app, config, cb) {
         writeFileAsync(
           path.join(platformPath, 'proguardApp.xml'),
           finalProguardApp,
+          {encoding: 'utf8'}
+        )
+      );
+      writePromises.push(
+        writeFileAsync(
+          path.join(platformPath, 'netWorkSecurityConfig.xml'),
+          finalNetWorkSecurity,
           {encoding: 'utf8'}
         )
       );
@@ -380,6 +404,7 @@ function processGradleXml(baseXmlPath, xmlPromises, XML_MARKER) {
  */
 function injectContent(content, marker, newContent) {
   var index = content.indexOf(marker);
+
   if (index > -1) {
     content = content.slice(0, index) +
       newContent +

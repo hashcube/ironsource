@@ -207,7 +207,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       XML_PROGUARD_APP_MARKER
     );
 
-    baseNetWorkSecurityConfig = path.join(__dirname, folder, 'netWorkSecurityConfig.xml');
+    baseNetWorkSecurityConfig = path.join(__dirname, folder, 'networkSecurityConfig.xml');
     xmlNetworkSecurityPromise = processGradleXml(
       baseNetWorkSecurityConfig,
       netWorkSecurityConfigPromises,
@@ -308,7 +308,7 @@ exports.onBeforeBuild = function (api, app, config, cb) {
       );
       writePromises.push(
         writeFileAsync(
-          path.join(platformPath, 'netWorkSecurityConfig.xml'),
+          path.join(platformPath, 'networkSecurityConfig.xml'),
           finalNetWorkSecurity,
           {encoding: 'utf8'}
         )

@@ -1,2 +1,2 @@
 	//<!-- Chartboost -->
-    implementation 'com.ironsource.adapters:chartboostadapter:4.1.8@jar'
+    implementation 'com.ironsource.adapters:chartboostadapter:4.1.9@jar'

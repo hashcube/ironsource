@@ -1,2 +1,2 @@
 	//<!--Ironsource Android Dependencies-->
-    implementation 'com.ironsource.sdk:mediationsdk:6.8.3@jar'
+    implementation 'com.ironsource.sdk:mediationsdk:6.8.5@jar'

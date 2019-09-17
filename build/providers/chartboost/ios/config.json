@@ -1,6 +1,5 @@
 {
   "frameworks": [
-    "ISChartboostAdapter.framework",
-    "Chartboost.framework"
+    "ISChartboostAdapter.framework"
   ]
 }

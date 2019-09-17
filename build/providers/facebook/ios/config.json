@@ -7,7 +7,6 @@
     "UIKit",
     "WebKit",
     "VideoToolbox",
-    "ISFacebookAdapter.framework",
-    "FBAudienceNetwork.framework"
+    "ISFacebookAdapter.framework"
   ]
 }

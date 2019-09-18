@@ -1,5 +1,4 @@
 #import "PluginManager.h"
-#import <IronSource/IronSource.h>
 
 @interface IronSourcePlugin : GCPlugin <ISRewardedVideoDelegate, ISOfferwallDelegate, ISInterstitialDelegate>
 

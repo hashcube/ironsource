@@ -1,9 +1,15 @@
 {
   "frameworks": [
     "ISAdMobAdapter.framework",
-    "GoogleMobileAds.framework"
+    "GoogleMobileAds.framework",
+    "GoogleAppMeasurement.framework",
+    "GoogleUtilities.framework",
+    "nanopb.framework"
   ],
   "additionalLinkerFlags": [
     "-fobjc-arc"
-  ]
+  ],
+  "plist": {
+    "GADApplicationIdentifier": "ca-app-pub-5728433367706879~8801048089"
+  }
 }

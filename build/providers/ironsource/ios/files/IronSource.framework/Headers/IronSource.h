@@ -2,6 +2,8 @@
 //  Copyright © 2017 IronSource. All rights reserved.
 //
 
+
+
 #ifndef IRONSOURCE_H
 #define IRONSOURCE_H
 
@@ -22,6 +24,9 @@
 #import "ISSupersonicAdsConfiguration.h"
 #import "ISSegment.h"
 #import "ISSegmentDelegate.h"
+#import "ISDemandOnlyRewardedVideoDelegate.h"
+#import "ISDemandOnlyInterstitialDelegate.h"
+#import "ISBannerSize.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -30,13 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 #define IS_OFFERWALL @"offerwall"
 #define IS_BANNER @"banner"
 
-typedef NS_ENUM(NSUInteger, ISBannerSize) {
-    IS_AD_SIZE_BANNER = 0,
-    IS_AD_SIZE_LARGE_BANNER = 1,
-    IS_AD_SIZE_RECTANGLE_BANNER = 2,
-    IS_AD_SIZE_TABLET_BANNER __deprecated_enum_msg("Use IS_AD_SIZE_LARGE_BANNER") = 3,
-    IS_AD_SIZE_SMART = 4
-};
+static NSString * const MEDIATION_SDK_VERSION     = @"6.8.5";
+static NSString * GitHash = @"120cc4567";
 
 @interface IronSource : NSObject
 
@@ -47,6 +47,7 @@ typedef NS_ENUM(NSUInteger, ISBannerSize) {
  @return NSString representing the current IronSource SDK version.
  */
 + (NSString *)sdkVersion;
+
 
 /**
  @abstact Sets a numeric representation of the current user's age.
@@ -167,6 +168,14 @@ typedef NS_ENUM(NSUInteger, ISBannerSize) {
  */
 + (void)initWithAppKey:(NSString *)appKey adUnits:(NSArray<NSString *> *)adUnits;
 
+/**
+ @abstract Initializes ironSource SDK in demand only mode.
+ @discussion This method initializes IS_REWARDED_VIDEO and/or IS_INTERSTITIAL ad units.
+ @param appKey Application key.
+ @param adUnits An array containing IS_REWARDED_VIDEO and/or IS_INTERSTITIAL.
+ */
++ (void)initISDemandOnly:(NSString *)appKey adUnits:(NSArray<NSString *> *)adUnits;
+
 #pragma mark - Rewarded Video
 
 /**
@@ -228,6 +237,35 @@ typedef NS_ENUM(NSUInteger, ISBannerSize) {
   */
 + (void)clearRewardedVideoServerParameters;
 
+#pragma mark - Demand Only Rewarded Video
+/**
+ @abstract Sets the delegate for demand only rewarded video callbacks.
+ @param delegate The 'ISDemandOnlyRewardedVideoDelegate' for IronSource to send callbacks to.
+ */
++ (void)setISDemandOnlyRewardedVideoDelegate:(id<ISDemandOnlyRewardedVideoDelegate>)delegate;
+
+/**
+ @abstract Loads a demand only rewarded video.
+ @discussion This method will load a demand only rewarded video ad.
+ @param instanceId The demand only instance id to be used to display the rewarded video.
+ */
++ (void)loadISDemandOnlyRewardedVideo:(NSString *)instanceId;
+
+/**
+ @abstract Shows a demand only rewarded video using the default placement.
+ @param viewController The UIViewController to display the rewarded video within.
+ @param instanceId The demand only instance id to be used to display the rewarded video.
+ */
++ (void)showISDemandOnlyRewardedVideo:(UIViewController *)viewController instanceId:(NSString *)instanceId;
+
+/**
+ @abstract Determine if a locally cached demand only rewarded video exists for an instance id.
+ @discussion A return value of YES here indicates that there is a cached rewarded video for the instance id.
+ @param instanceId The demand only instance id to be used to display the rewarded video.
+ @return YES if rewarded video is ready to be played, NO otherwise.
+ */
++ (BOOL)hasISDemandOnlyRewardedVideo:(NSString *)instanceId;
+
 #pragma mark - Interstitial
 
 /**
@@ -282,6 +320,36 @@ typedef NS_ENUM(NSUInteger, ISBannerSize) {
  */
 + (BOOL)isInterstitialCappedForPlacement:(NSString *)placementName;
 
+#pragma mark - Demand Only Interstitial
+
+/**
+ @abstract Sets the delegate for demand only interstitial callbacks.
+ @param delegate The 'ISDemandOnlyInterstitialDelegate' for IronSource to send callbacks to.
+ */
++ (void)setISDemandOnlyInterstitialDelegate:(id<ISDemandOnlyInterstitialDelegate>)delegate;
+
+/**
+ @abstract Loads a demand only interstitial.
+ @discussion This method will load a demand only interstitial ad.
+ @param instanceId The demand only instance id to be used to display the interstitial.
+ */
++ (void)loadISDemandOnlyInterstitial:(NSString *)instanceId;
+
+/**
+ @abstract Show a demand only interstitial using the default placement.
+ @param viewController The UIViewController to display the interstitial within.
+ @param instanceId The demand only instance id to be used to display the interstitial.
+ */
++ (void)showISDemandOnlyInterstitial:(UIViewController *)viewController instanceId:(NSString *)instanceId;
+
+/**
+ @abstract Determine if a locally cached interstitial exists for a demand only instance id.
+ @discussion A return value of YES here indicates that there is a cached interstitial for the instance id.
+ @param instanceId The demand only instance id to be used to display the interstitial.
+ @return YES if there is a locally cached interstitial, NO otherwise.
+ */
++ (BOOL)hasISDemandOnlyInterstitial:(NSString *)instanceId;
+
 #pragma mark - Offerwall
 
 /**
@@ -332,32 +400,34 @@ typedef NS_ENUM(NSUInteger, ISBannerSize) {
  @abstract Loads a banner using the default placement.
  @discussion This method will load banner ads of the requested size from the underlying ad networks according to their priority.
  
- The size should contain ISBannerSize value that represent the required banner ad size:
-
- IS_AD_SIZE_BANNER, IS_AD_SIZE_LARGE_BANNER, IS_AD_SIZE_RECTANGLE_BANNER
+ The size should contain ISBannerSize value that represent the required banner ad size.
+ e.g. [IronSource loadBannerWithViewController:self size:ISBannerSize_BANNER];
  
- e.g: [IronSource loadBannerWithViewController:self size:IS_AD_SIZE_BANNER];
+ Custom banner size:
+ ISBannerSize* bannerSize = [[ISBannerSize alloc] initWithWidth:320 andHeight:50];
+ [IronSource loadBannerWithViewController:self size:bannerSize];
  
  @param viewController The UIViewController to display the banner within.
- @param size required banner ad size
+ @param size The required banner ad size
  */
-+ (void)loadBannerWithViewController:(UIViewController *)viewController size:(ISBannerSize)size;
++ (void)loadBannerWithViewController:(UIViewController *)viewController size:(ISBannerSize *)size;
 
 /**
  @abstract Loads a banner using the provided placement name.
  @discussion This method will load banner ads of the requested size from the underlying ad networks according to their priority.
  
- The size should contain ISBannerSize value that represent the required banner ad size:
+ The size should contain ISBannerSize value that represent the required banner ad size.
+ e.g. [IronSource loadBannerWithViewController:self size:ISBannerSize_BANNER placement:@"your_placement_name"];
  
- IS_AD_SIZE_BANNER, IS_AD_SIZE_LARGE_BANNER, IS_AD_SIZE_RECTANGLE_BANNER
- 
- e.g: [IronSource loadBannerWithViewController:self size:IS_AD_SIZE_BANNER placement:"your_placement_name"];
+ Custom banner size:
+ ISBannerSize* bannerSize = [[ISBannerSize alloc] initWithWidth:320 andHeight:50];
+ [IronSource loadBannerWithViewController:self size:bannerSize placement:@"your_placement_name"];
  
  @param viewController The UIViewController to display the banner within.
- @param size required banner ad size
- @param placementName The placement name as was defined in the platform. If nil is passed, a default placement will be used.
+ @param size The required banner ad size
+ @param placementName The placement name as was defined in the platform. If nil is passed, the default placement will be used.
  */
-+ (void)loadBannerWithViewController:(UIViewController *)viewController size:(ISBannerSize)size placement:(nullable NSString *)placementName;
++ (void)loadBannerWithViewController:(UIViewController *)viewController size:(ISBannerSize *)size placement:(nullable NSString *)placementName;
 
 /**
  @abstract Removes the banner from memory.
@@ -382,6 +452,8 @@ typedef NS_ENUM(NSUInteger, ISBannerSize) {
  @param delegate The 'ISLogDelegate' for IronSource to send callbacks to.
  */
 + (void)setLogDelegate:(id<ISLogDelegate>)delegate;
+
++ (void)setConsent:(BOOL)consent;
 
 @end
 

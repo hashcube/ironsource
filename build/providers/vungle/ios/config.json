@@ -5,8 +5,7 @@
     "MediaPlayer",
     "UIKit",
     "WebKit",
-    "ISVungleAdapter.framework",
-    "VungleSDK.framework"
+    "ISVungleAdapter.framework"
   ],
   "plist": {
     "View controller-based status bar appearance": "No"

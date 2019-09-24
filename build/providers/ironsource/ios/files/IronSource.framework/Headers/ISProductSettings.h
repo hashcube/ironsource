@@ -12,19 +12,16 @@
 
 @interface ISProductSettings : NSObject
 
-@property (readonly, strong) NSArray         *placements;
-@property (readonly, assign) NSUInteger      maxNumOfAdaptersToLoadOnStart;
-@property (readonly, assign) double          adapterTimeOutInSeconds;
-@property (readonly, strong) NSString        *algo;
-@property (nonatomic, copy)  NSString        *backFillProviderName;
-@property (nonatomic, copy)  NSString        *premiumProviderName;
+@property (readonly, strong)    NSArray         *placements;
+@property (readonly, assign)    NSUInteger      maxNumOfAdaptersToLoadOnStart;
+@property (readonly, assign)    double          adapterTimeOutInSeconds;
+@property (readonly, strong)    NSString        *algo;
+@property (nonatomic, copy)     NSString        *backFillProviderName;
+@property (nonatomic, copy)     NSString        *premiumProviderName;
+@property (assign)              NSInteger       bannerInterval;
+@property (assign)              NSInteger       loadRVInterval;
+@property (assign)              NSUInteger      delayLoadFailureNotificationInSeconds;
 
-- (instancetype)initWithplacements:(NSArray *)placements
-     maxNumOfAdaptersToLoadOnStart:(NSUInteger)maxAdapters
-           adapterTimeOutInSeconds:(double)adapterTimeout
-                              algo:(NSString *)algo
-              backFillProviderName:(NSString *)backFillProviderName
-               premiumProviderName:(NSString *)premiumProviderName;
-
+- (instancetype)initWithplacements:(NSArray *)placements maxNumOfAdaptersToLoadOnStart:(NSUInteger)maxAdapters adapterTimeOutInSeconds:(double)adapterTimeout delayLoadFailureNotificationInSeconds:(NSUInteger)delayLoadFailure algo:(NSString *)algo backFillProviderName:(NSString *)backFillProviderName premiumProviderName:(NSString *)premiumProviderName;
 
 @end

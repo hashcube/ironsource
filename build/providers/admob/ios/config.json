@@ -8,5 +8,8 @@
   ],
   "additionalLinkerFlags": [
     "-fobjc-arc"
-  ]
+  ],
+  "plist": {
+    "GADApplicationIdentifier": "ca-app-pub-5728433367706879~8801048089"
+  }
 }

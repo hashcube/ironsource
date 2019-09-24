@@ -1,7 +1,10 @@
 {
   "frameworks": [
     "ISAdMobAdapter.framework",
-    "GoogleMobileAds.framework"
+    "GoogleMobileAds.framework",
+    "GoogleAppMeasurement.framework",
+    "GoogleUtilities.framework",
+    "nanopb.framework"
   ],
   "additionalLinkerFlags": [
     "-fobjc-arc"

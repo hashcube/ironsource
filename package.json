@@ -1,6 +1,6 @@
 {
   "name": "ironsource",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "devkit": {
     "clientPaths": {
       "ironsource": "js"

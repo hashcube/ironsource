@@ -1,6 +1,5 @@
 {
   "frameworks": [
-    "AppLovinSDK.framework",
     "ISAppLovinAdapter.framework"
   ],
   "additionalLinkerFlags": [

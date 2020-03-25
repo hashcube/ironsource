@@ -1,0 +1,1 @@
+build/providers/applovin/ios/files/ISAppLovinAdapter.framework/ISApplovinAdapter filter=lfs diff=lfs merge=lfs -text
